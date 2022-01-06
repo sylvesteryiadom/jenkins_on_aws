@@ -18,7 +18,7 @@ High level overview of steps involved
 
 ## Blog Post
 
-- [https://medium.com/@SylvesterYiadom](https://medium.com/@SylvesterYiadom/integrate-jenkins-with-aws-part-i-e51f141b7ec2)
+- [Blog Post](https://medium.com/@SylvesterYiadom/integrate-jenkins-with-aws-part-i-e51f141b7ec2)
 
 1. Login to AWS console and go to the VPC console
 -  Launch a VPC using the default settings
