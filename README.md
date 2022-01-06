@@ -1,5 +1,5 @@
 
-# Build a Jenkins CI/CD Pipeline on AWS
+# Integrate Jenkins with AWS
 
 This projects will walk you through steps in setting up a jenkins master/slave server to create a CI/CD Pipeline
 
