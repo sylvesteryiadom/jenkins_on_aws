@@ -16,7 +16,9 @@ High level overview of steps involved
 -  Spin up EC2 and install and configure Jenkins , create AMI out of EC2
 -  Create a user with ec2 permissions spin up ec2 instances to run jenkins jobs
 
+## Blog Post
 
+- [https://medium.com/@SylvesterYiadom](https://medium.com/@SylvesterYiadom/integrate-jenkins-with-aws-part-i-e51f141b7ec2)
 
 1. Login to AWS console and go to the VPC console
 -  Launch a VPC using the default settings
