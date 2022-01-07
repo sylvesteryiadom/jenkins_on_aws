@@ -1,6 +1,6 @@
 
 # Integrate Jenkins with AWS
-This a step by step tutotial on how to integrate Jenkins with AWS.
+This is a step by step project on how to integrate Jenkins with AWS.
 
 
 High level overview of steps involved
@@ -20,15 +20,15 @@ High level overview of steps involved
 - Git
 - Maven
 ## Running Tests
-We will use the Java spring-petclinic to ran a test job on our Jenkins worker node
+We will use the Java spring-petclinic to ran a compile job on the Jenkins worker node
 
 Github repo: https://github.com/spring-projects/spring-petclinic
 
-## future-to-dos
+## Future-to-dos
 - Add a build trigger within Jenkins to automatically integrate changes
-- Automate the creation of amazon resources using either Terraform or Cloudformation
+- Automate the creation of amazon resources using either Terraform, Cloudformation, AWS CDK or Python (Pulumi)
 - Automate the installation of Jenkins and its dependencies using User data.
-- Create a full pipeline job on a worker node.
+- Create a full CI/CD pipeline job on a worker node.
 ## Author
 
 - [@SylvesterYiadom](https://www.syiadom.com/)
