@@ -5,4 +5,4 @@ sudo yum update -y
 sudo yum install git -y
  
 #Check git version
-git version
+git --version
