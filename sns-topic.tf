@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
   account_id    = data.aws_caller_identity.current.account_id
-  ossAccouuntId = var.environment == "dev" ? "1023521001" : (var.environment == "int" || var.environment == "pvs") ? "1333115252" : "9956599262"
+  ossAccountId = var.env == "dev" ? "1023521001" : (var.env == "int" || var.env == "pvs") ? "1333115252" : "9956599262"
 }
 
 resource "aws_sns_topic" "gbs-cap-complete-topic" {
@@ -57,10 +57,10 @@ resource "aws_sns_topic" "gbs-cap-complete-topic" {
 }
 EOF
 
-  tags = merge(var.cigna_required_tags, {
-    ComplianceDataCategory = "pci"
-    DataClassification     = "restricted"
-    DataSubjectArea        = "claim"
-  })
+  # tags = merge(var.cigna_required_tags, {
+  #   ComplianceDataCategory = "pci"
+  #   DataClassification     = "restricted"
+  #   DataSubjectArea        = "claim"
+  # })
 }
 
