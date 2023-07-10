@@ -45,3 +45,6 @@ if ($fileCount -gt 0) {
     Write-Host "No files found in input folder."
     exit 1 # Failed exit code
 }
+
+
+# Get-ChildItem -Path "C:\path\to\directory" -Directory | ForEach-Object { $_.FullName + ": " + "{0:N2}" -f ((Get-ChildItem -Path $_.FullName -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB) + " MB" }
