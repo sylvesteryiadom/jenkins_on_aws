@@ -46,5 +46,9 @@ if ($fileCount -gt 0) {
     exit 1 # Failed exit code
 }
 
+# $directoryPath = "C:\path\to\directory"
+# $largestFolder = Get-ChildItem -Path $directoryPath -Directory | ForEach-Object { $_.FullName + ": " + "{0:N2}" -f ((Get-ChildItem -Path $_.FullName -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB) + " MB" } | Sort-Object -Property { [double]($_ -split ": ")[1] } -Descending | Select-Object -First 1
+# Write-Host "The folder with the largest size is:" $largestFolder
+
 
 # Get-ChildItem -Path "C:\path\to\directory" -Directory | ForEach-Object { $_.FullName + ": " + "{0:N2}" -f ((Get-ChildItem -Path $_.FullName -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB) + " MB" }
