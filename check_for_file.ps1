@@ -55,6 +55,9 @@ if ($fileCount -gt 0) {
 
 # NEW SCRIPT
 
+Get-ChildItem -Path "C:\allfolders" -Directory | Select-Object -ExpandProperty Name | Out-File -FilePath "C:\folder_names.txt"
+
+
 param (
     [string]$folderNamesDir,
     [string]$jobFilesDir
