@@ -102,4 +102,28 @@
 
 # ./mkdir_folders.ps1 -folderNamesDir "/Users/sylvesteryiadom/Desktop/folder_names.txt" -jobFilesDir "/Users/sylvesteryiadom/Desktop/input"
 
+# Specify your bucket name
+$bucketName = "your-bucket-name"
 
+# Specify the target date in the format "YYYY-MM-DD"
+$targetDate = "2023-09-26"
+
+# List objects in the bucket
+$objects = aws s3 ls s3://$bucketName
+
+# Loop through the objects and download those with the target date
+foreach ($object in $objects) {
+    # Extract the object key and last modified date from the listing
+    $objectKey = ($object -split '\s+')[3]
+    $lastModified = ($object -split '\s+')[0, 1] -join ' '
+
+    # Convert the last modified date to the desired format (YYYY-MM-DD)
+    $formattedDate = Get-Date $lastModified -Format "yyyy-MM-dd"
+
+    # Check if the date matches the target date
+    if ($formattedDate -eq $targetDate) {
+        # Download the object
+        aws s3 cp "s3://$bucketName/$objectKey" "./$objectKey"
+        Write-Host "Downloaded $objectKey"
+    }
+}
