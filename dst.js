@@ -58,3 +58,58 @@ async function updateEventBridgeRule(ruleName, newCronExpression) {
     })
     .promise();
 }
+
+locals {
+  AWS_REGION   = data.aws_region.current.name
+  AWS_ACCOUNT  = data.aws_caller_identity.current.id
+  ossAccountId = var.env == "dev" ? ["111111", "2222222"] : (var.env == "int" || var.env == "prd") ? ["3333333", "444444", "555555"] : ["5555555", "1111111"]
+}
+
+resource "aws_sns_topic" "gbs-cap-complete-topic" {
+  content_based_deduplication = false
+  fifo_topic                  = false
+  kms_master_key_id           = "alias/aws/sns"
+  name                        = "gbs-${var.env}-cap-complete-topic"
+
+  policy = jsonencode({
+    "Version" : "2008-10-17",
+    "Id" : "__default_policy_ID",
+    "Statement" : [
+      {
+        "Sid" : "__default_statement_ID",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : "*"
+        },
+        "Action" : [
+          "SNS:Publish",
+          "SNS:RemovePermission",
+          "SNS:SetTopicAttributes",
+          "SNS:DeleteTopic",
+          "SNS:ListSubscriptionsByTopic",
+          "SNS:GetTopicAttributes",
+          "SNS:AddPermission",
+          "SNS:Subscribe"
+        ],
+        "Resource" : "arn:aws:sns:${local.AWS_REGION}:${local.AWS_ACCOUNT}:gbs-${var.env}-cap-complete-topic",
+        "Condition" : {
+          "StringEquals" : {
+            "AWS:SourceOwner" : "${local.AWS_ACCOUNT}"
+          }
+        }
+      },
+      {
+        "Sid" : "__console_sub_0",
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : [join(",", local.ossAccountId)]
+        },
+        "Action" : [
+          "SNS:Subscribe"
+        ],
+        "Resource" : "arn:aws:sns:${local.AWS_REGION}:${local.AWS_ACCOUNT}:gbs-${var.env}-cap-complete-topic"
+      }
+    ]
+  })
+  tags = local.all_tags
+}
