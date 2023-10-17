@@ -131,3 +131,20 @@ foreach ($object in $objects) {
 
 
 $failedJobs = kubectl get job -n batch -o custom-columns="JOB_NAME:.metadata.name,FAILED:.status.failed" --no-headers=true | Where-Object { $_.FAILED -ge 1 } | ForEach-Object { $_.JOB_NAME }
+
+
+$failed = $(kubectl get job -o=jsonpath='{.items[?(@.status.failed>=1)].metadata.name}' -n batch).Split(' ')
+
+# Check if $failed array is empty (no failed jobs found)
+if ($failed.Count -eq 0) {
+    Write-Host "Failure"
+} else {
+    $output = kubectl describe job -n batch $failed[0] | Out-String
+
+    # Check if the "BackoffLimitExceeded" pattern is found in the output
+    if ($output -match "\bBackoffLimitExceeded\b") {
+        Write-Host "Success"
+    } else {
+        Write-Host "Failure"
+    }
+}
