@@ -127,3 +127,7 @@ foreach ($object in $objects) {
         Write-Host "Downloaded $objectKey"
     }
 }
+
+
+
+$failedJobs = kubectl get job -n batch -o custom-columns="JOB_NAME:.metadata.name,FAILED:.status.failed" --no-headers=true | Where-Object { $_.FAILED -ge 1 } | ForEach-Object { $_.JOB_NAME }
