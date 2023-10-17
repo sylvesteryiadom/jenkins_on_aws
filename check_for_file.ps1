@@ -137,14 +137,14 @@ $failed = $(kubectl get job -o=jsonpath='{.items[?(@.status.failed>=1)].metadata
 
 # Check if $failed array is empty (no failed jobs found)
 if ($failed.Count -eq 0) {
-    Write-Host "Failure"
+    exit 1  # Exit with code 1 for failure
 } else {
     $output = kubectl describe job -n batch $failed[0] | Out-String
 
     # Check if the "BackoffLimitExceeded" pattern is found in the output
     if ($output -match "\bBackoffLimitExceeded\b") {
-        Write-Host "Success"
+        exit 0  # Exit with code 0 for success
     } else {
-        Write-Host "Failure"
+        exit 1  # Exit with code 1 for failure
     }
 }
