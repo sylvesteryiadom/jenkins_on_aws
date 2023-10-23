@@ -102,24 +102,34 @@
 
 # ./mkdir_folders.ps1 -folderNamesDir "/Users/sylvesteryiadom/Desktop/folder_names.txt" -jobFilesDir "/Users/sylvesteryiadom/Desktop/input"
 
-# Specify Bucket Name and Target Date
-$bucketName = "your-bucket-name"
-$targetDate = "2023-09-26"
+param (
+    [string]$bucketName,
+    [string]$targetDate
+)
 
-# List objects in the bucket
+# Check if required parameters are provided
+if (-not $bucketName -or -not $targetDate) {
+    Write-Host "Usage: script.ps1 -bucketName <bucketName> -targetDate <targetDate>"
+    exit
+}
+
+# Create a folder with the target date
+$folderPath = Join-Path -Path $PSScriptRoot -ChildPath $targetDate
+if (-not (Test-Path $folderPath -PathType Container)) {
+    New-Item -ItemType Directory -Path $folderPath | Out-Null
+}
+
+# List objects in the specified bucket
 $objects = aws s3 ls s3://$bucketName
 
-# Loop through the objects and download those with the target date
+# Loop through the objects and download those with the target date into the folder
 foreach ($object in $objects) {
-    # Extract the object key and last modified date from the listing
     $parts = ($object -split '\s+')
 
-    # Check if there are enough parts (including a valid date)
     if ($parts.Length -ge 4) {
         $objectKey = $parts[3]
         $lastModified = $parts[0, 1] -join ' '
         
-        # Attempt to convert the last modified date to the desired format (YYYY-MM-DD)
         try {
             $formattedDate = Get-Date $lastModified -Format "yyyy-MM-dd"
         }
@@ -128,10 +138,9 @@ foreach ($object in $objects) {
             continue
         }
 
-        # Check if the date matches the target date
         if ($formattedDate -eq $targetDate) {
-            # Download the object
-            aws s3 cp "s3://$bucketName/$objectKey" "./$objectKey"
+            $localFilePath = Join-Path -Path $folderPath -ChildPath $objectKey
+            aws s3 cp "s3://$bucketName/$objectKey" $localFilePath
             Write-Host "Downloaded $objectKey"
         }
     }
@@ -139,6 +148,7 @@ foreach ($object in $objects) {
         Write-Host "Invalid line format: $object. Skipping."
     }
 }
+
 
 
 
