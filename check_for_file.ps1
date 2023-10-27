@@ -175,3 +175,4 @@ if ($failed.Count -eq 0) {
 
 Get-ChildItem -Path "C:\path\to\directory" -Directory | ForEach-Object { $_.FullName + ": " + "{0:N2}" -f ((Get-ChildItem -Path $_.FullName -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB) + " MB" }
 
+$filteredJobs = kubectl get jobs --no-headers | Where-Object { $_ -like "*binb*" } | ForEach-Object { $_.Split()[0] }
