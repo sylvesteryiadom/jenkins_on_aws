@@ -176,3 +176,5 @@ if ($failed.Count -eq 0) {
 Get-ChildItem -Path "C:\path\to\directory" -Directory | ForEach-Object { $_.FullName + ": " + "{0:N2}" -f ((Get-ChildItem -Path $_.FullName -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB) + " MB" }
 
 $filteredJobs = kubectl get jobs --no-headers | Where-Object { $_ -like "*binb*" } | ForEach-Object { $_.Split()[0] }
+
+$folderPath = "C:\Your\Folder\Path"; $intervalInSeconds = 60; while ($true) { if ((Get-ChildItem -Path $folderPath -File -Recurse).Count -gt 0) { Write-Host "Files are being written to the folder." } else { Write-Host "No new files detected." }; Start-Sleep -Seconds $intervalInSeconds }
